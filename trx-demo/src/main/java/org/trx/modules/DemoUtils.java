@@ -3,8 +3,8 @@ package org.trx.modules;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.tron.utils.HttpClientUtils;
 import org.tron.utils.TronUtils;
 import org.web3j.abi.FunctionEncoder;
@@ -106,7 +106,7 @@ public class DemoUtils {
         param.put("parameter", FunctionEncoder.encodeConstructor(inputParameters));
         String result = HttpClientUtils.postJson(url, param.toJSONString());
         BigDecimal amount = BigDecimal.ZERO;
-        if (StringUtils.isNotEmpty(result)) {
+        if (!StringUtils.isEmpty(result)) {
             JSONObject obj = JSONObject.parseObject(result);
             JSONArray results = obj.getJSONArray("constant_result");
             if (results != null && results.size() > 0) {
@@ -158,7 +158,7 @@ public class DemoUtils {
         // 将金额转为sun单位
         param.put("amount", trxAmount.multiply(BigDecimal.TEN.pow(6)).toBigInteger());
         String _result = HttpClientUtils.postJson(url, param.toJSONString());
-        if (StringUtils.isNotEmpty(_result)) {
+        if (!StringUtils.isEmpty(_result)) {
             JSONObject transaction = JSONObject.parseObject(_result);
             return TronUtils.signAndBroadcast(tronUrl, fromPrivateKey, transaction);
         }
